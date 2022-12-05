@@ -39,7 +39,6 @@ pub fn main() {
                     stacks.push(Vec::new());
                 }
                 stacks[i].push(c);
-                // println!("{i} {}", stacks[i].first().unwrap());
 
                 i += 1;
             }
@@ -52,14 +51,17 @@ pub fn main() {
 
             print!("{} {} {} ", amount, from, to);
 
+            let mut stack: Vec<char> = Vec::new();
             for _ in 0..amount {
-                // if reversed_stacks[usize::try_from(from-1).unwrap()].is_empty() {
-                //     continue;
-                // }
                 let c = reversed_stacks[usize::try_from(from).unwrap() - 1].pop().unwrap();
-                reversed_stacks[usize::try_from(to).unwrap() - 1].push(c);
+                stack.push(c);
             }
 
+            while !stack.is_empty() {
+                let c = stack.pop().unwrap();
+                reversed_stacks[usize::try_from(to).unwrap() - 1].push(c);
+            }
+            
             for i in 0..reversed_stacks.len() {
                 if reversed_stacks[i].is_empty() {
                     continue;
