@@ -1,15 +1,18 @@
-use advent_of_code::{split, read_file};
+// https://adventofcode.com/2022/day/5
 
-pub fn main() {
-    let lines = split(read_file("src/bin/day-5/in-1.txt"), "\n");
+use advent_of_code_2022::split;
 
-    let mut i = 0; 
+fn parse(input: &str) -> Vec<String> { return split(input, "\n"); }
+
+
+fn solve2(parsed_input: &Vec<String>) -> String { 
+    let mut i: usize; 
     let mut parsing_moves: bool = false;
 
     let mut stacks: Vec<Vec<char>> = Vec::new();
     let mut reversed_stacks: Vec<Vec<char>> = Vec::new();
 
-    for line in lines {
+    for line in parsed_input {
         if line == "" {
             parsing_moves = true;
             for i in 0..stacks.len() {
@@ -17,13 +20,13 @@ pub fn main() {
                 while !stacks[i].is_empty() {
                     let c = stacks[i].pop().unwrap();
                     reversed_stacks[i].push(c);
-                    print!("{}", c)
+                    // print!("{}", c)
                 }
-                println!();
+                // println!();
             }
             continue;
         }
-        print!("{line}  ");
+        // print!("{line}  ");
         
         i = 0;
         if !parsing_moves {
@@ -44,12 +47,12 @@ pub fn main() {
             }
         } 
         else {
-            let words = split(line, " ");
+            let words = split(&line, " ");
             let amount: u32 = words[1].parse().unwrap();
             let from: u32 = words[3].parse().unwrap();
             let to: u32 = words[5].parse().unwrap();
 
-            print!("{} {} {} ", amount, from, to);
+            // print!("{} {} {} ", amount, from, to);
 
             let mut stack: Vec<char> = Vec::new();
             for _ in 0..amount {
@@ -62,23 +65,35 @@ pub fn main() {
                 reversed_stacks[usize::try_from(to).unwrap() - 1].push(c);
             }
             
-            for i in 0..reversed_stacks.len() {
-                if reversed_stacks[i].is_empty() {
-                    continue;
-                }
-                let c = reversed_stacks[i].last().unwrap();
-                print!("{c}")
-            }
+            // for i in 0..reversed_stacks.len() {
+            //     if reversed_stacks[i].is_empty() {
+            //         continue;
+            //     }
+            //     let c = reversed_stacks[i].last().unwrap();
+            //     print!("{c}")
+            // }
         }
 
-        println!();
+        // println!();
     }
 
-    println!();
+    let mut solution = String::new();
     for mut stack in reversed_stacks {
-        let c = stack.pop().unwrap();
-        print!("{c}");
+        solution.push(stack.pop().unwrap());
     }
-    println!();
 
+    // println!();
+    // for mut stack in reversed_stacks {
+    //     let c = stack.pop().unwrap();
+    //     print!("{c}");
+    // }
+    // println!(); }
+
+    return solution;
+}
+
+pub fn solve(input: &str) -> (String, String) {
+    let parsed_input = parse(input);
+
+    return ("".to_string(), solve2(&parsed_input));
 }

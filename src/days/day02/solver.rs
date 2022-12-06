@@ -1,12 +1,14 @@
-use advent_of_code::{split, read_file};
+// https://adventofcode.com/2022/day/2
 
-fn main() {
-    let lines = split(read_file("src/bin/day-2/1.txt"), "\n");
+use advent_of_code_2022::split;
+
+pub fn solve(input: &str) -> (String, String) {
+    let lines = split(input, "\n");
 
     let mut score = 0;
 
     for g in lines {
-        let shapes = split(g, " ");
+        let shapes = split(&g, " ");
         let opp = &shapes[0];
         let mut me  = shapes[1].as_str();
 
@@ -61,5 +63,5 @@ fn main() {
         }
     }
 
-    println!("{score}");
+    return ("".to_string(), score.to_string());
 }

@@ -1,7 +1,10 @@
-use advent_of_code::{read_file, split_lines, split};
+// https://adventofcode.com/2022/day/1
 
-fn main() {
-    let elves = split_lines(split(read_file("src/bin/day-1/in.txt"), "\n\n"), "\n");
+use advent_of_code_2022::{split_lines, split};
+
+
+pub fn solve(input: &str) -> (String, String) {
+    let elves = split_lines(&split(input, "\n\n"), "\n");
 
     let calories: Vec<Vec<i32>> = elves.iter().map(|e| e.iter().map(|c| c.parse::<i32>().unwrap()).collect()).collect();
 
@@ -28,5 +31,5 @@ fn main() {
         }
     }
 
-    println!("{}", max_calories1 + max_calories2 + max_calories3);
+    return (max_calories1.to_string(), (max_calories1 + max_calories2 + max_calories3).to_string())
 }
