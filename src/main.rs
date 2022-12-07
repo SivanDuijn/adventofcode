@@ -4,6 +4,8 @@ use std::env;
 use advent_of_code_2022::read_file;
 use days::*;
 
+use crate::days::solutions::*;
+
 pub fn main() {
     let day:usize = env::args().nth(1).unwrap_or_default().parse().unwrap_or_default();
 
@@ -17,15 +19,22 @@ pub fn main() {
 
     let solver = SOLVERS[day-1];
 
-    let (example_solution1, example_2) = solver(&example_input);
-    println!("\nexample solutions: {example_solution1} {example_2}");
+    println!();
+    format_output("example: ", &solver(&example_input), &EXAMPLE_SOLUTIONS[day-1]);
 
     // If the argument e is provided, only solve for the example input
     if env::args().nth(2).unwrap_or_default() != "e" {
-        let (solution1, solutions2) = solver(&input);
-        println!(  "solutions:         {solution1} {solutions2}");
-    } 
+        format_output("solution:", &solver(&input), &SOLUTIONS[day-1]);
+    }
 
+}
+
+fn format_output(prefix: &str, solution: &(String, String), truth: &(&str, &str)) {
+    println!("{prefix} {}{}  {}{}", 
+        if solution.0 == truth.0 {"🎉 "} else {"❗️ "},
+        solution.0, 
+        if solution.1 == truth.1 {"🎉 "} else {"❗️ "},
+        solution.1);
 }
 
 const SOLVERS: [&dyn Fn(&str) -> (String, String); 7] = [
