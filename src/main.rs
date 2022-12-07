@@ -28,11 +28,12 @@ pub fn main() {
 
 }
 
-const SOLVERS: [&dyn Fn(&str) -> (String, String); 6] = [
+const SOLVERS: [&dyn Fn(&str) -> (String, String); 7] = [
     &day01::solver::solve,
     &day02::solver::solve,
     &day03::solver::solve,
     &day04::solver::solve,
     &day05::solver::solve,
     &day06::solver::solve,
+    &day07::solver::solve,
 ];

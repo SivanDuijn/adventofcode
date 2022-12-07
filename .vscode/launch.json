@@ -7,16 +7,17 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'day-1'",
+            "name": "Debug unit tests in library 'advent_of_code_2022'",
             "cargo": {
                 "args": [
-                    "build",
-                    "--bin=day-1",
-                    "--package=advent-of-code"
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=advent_of_code_2022"
                 ],
                 "filter": {
-                    "name": "day-1",
-                    "kind": "bin"
+                    "name": "advent_of_code_2022",
+                    "kind": "lib"
                 }
             },
             "args": [],
@@ -25,16 +26,34 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'day-1'",
+            "name": "Debug executable 'advent_of_code_2022'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=advent_of_code_2022",
+                    "--package=advent_of_code_2022"
+                ],
+                "filter": {
+                    "name": "advent_of_code_2022",
+                    "kind": "bin"
+                }
+            },
+            "args": ["7", "e"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'advent_of_code_2022'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=day-1",
-                    "--package=advent-of-code"
+                    "--bin=advent_of_code_2022",
+                    "--package=advent_of_code_2022"
                 ],
                 "filter": {
-                    "name": "day-1",
+                    "name": "advent_of_code_2022",
                     "kind": "bin"
                 }
             },
