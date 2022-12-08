@@ -1,4 +1,4 @@
-// https://adventofcode.com/2022/day/?
+// https://adventofcode.com/2022/day/8
 
 use std::collections::HashSet;
 
@@ -146,7 +146,6 @@ fn solve2(grid: &Vec<Vec<i32>>) -> String {
         }
     }
 
-    
     return best_view_dinstance.to_string();
 }
 
