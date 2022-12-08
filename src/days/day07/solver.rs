@@ -1,6 +1,6 @@
 // https://adventofcode.com/2022/day/7
 
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 use advent_of_code_2022::split;
 
@@ -65,7 +65,7 @@ fn solve1(dirs: &Vec<Directory>) -> String {
 fn solve2(dirs: &Vec<Directory>) -> String {
     let unused_space = 70000000 - dirs[0].size;
 
-    let mut sorted: Vec<i32> = dirs.iter().map(|d| d.size).collect::<Vec<i32>>();
+    let mut sorted: Vec<i32> = dirs.iter().map(|d| d.size).collect();
     sorted.sort();
     return sorted.iter().find(|&v| v + unused_space > 30000000).unwrap().to_string();
 }
