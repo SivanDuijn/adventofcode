@@ -47,7 +47,9 @@ impl CRT {
             self.next_row_cycle += 40;
 
             self.total_signal_strength += self.register_x * self.cycle_counter;
-            self.screen += "\n";
+            if self.draw_to_screen {
+                self.screen += "\n";
+            }
         }
     }
 
