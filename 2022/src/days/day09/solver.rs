@@ -16,9 +16,6 @@ struct Point {
 }
 
 impl Point {
-    pub fn new(x: i32, y: i32) -> Self {
-        Self { x, y }
-    }
     pub fn zero() -> Self {
         Self { x: 0, y: 0 }
     }
@@ -56,24 +53,24 @@ fn simulate_moves(motions: &Vec<(&str, i32)>, n_knots: usize) -> String {
     let mut points_tail_visited:HashSet<Point> = HashSet::new();
     points_tail_visited.insert(Point::zero());
 
-    let mut movement:Point = Point::zero();
+    let movement = &mut Point::zero();
     for &(dir, mut amount) in motions {
         match dir {
-            "R" => movement = Point::new(1, 0),
-            "L" => movement = Point::new(-1, 0),
-            "U" => movement = Point::new(0, 1),
-            "D" => movement = Point::new(0, -1),
+            "R" => movement.x =  1,
+            "L" => movement.x = -1,
+            "U" => movement.y =  1,
+            "D" => movement.y = -1,
             _ => {}
         }
 
         while amount > 0 {
-            knots[0] += movement;
+            knots[0] += *movement;
 
             for i in 0..(n_knots - 1) {
                 let mut diff = knots[i] - knots[i + 1];
                 
                 if diff.x*diff.x + diff.y*diff.y >= 4 {
-                    // We need to move the this knot
+                    // We need to move this knot
                     diff.clamp_to_one();
                     knots[i + 1] += diff;
 
@@ -86,6 +83,9 @@ fn simulate_moves(motions: &Vec<(&str, i32)>, n_knots: usize) -> String {
             
             amount -= 1;
         }
+
+        movement.x = 0;
+        movement.y = 0;
     }
 
     return points_tail_visited.len().to_string();
