@@ -37,7 +37,7 @@ fn format_output(prefix: &str, solution: &(String, String), truth: &(&str, &str)
         solution.1);
 }
 
-const SOLVERS: [&dyn Fn(&str) -> (String, String); 10] = [
+const SOLVERS: [&dyn Fn(&str) -> (String, String); 11] = [
     &day01::solver::solve,
     &day02::solver::solve,
     &day03::solver::solve,
@@ -48,4 +48,5 @@ const SOLVERS: [&dyn Fn(&str) -> (String, String); 10] = [
     &day08::solver::solve,
     &day09::solver::solve,
     &day10::solver::solve,
+    &day11::solver::solve,
 ];
