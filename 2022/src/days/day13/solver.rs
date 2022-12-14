@@ -16,33 +16,25 @@ impl PartialOrd for Packet {
 
 impl Ord for Packet {
     fn cmp(&self, other: &Self) -> Ordering {
-        match self {
-            Packet::Value(v1) => {
-                match other {
-                    Packet::Value(v2) => v1.cmp(v2),
-                    Packet::Packets(_) => Packet::Packets(vec![Packet::Value(*v1)]).cmp(other)
-                }
-            },
-            Packet::Packets(ps_left) => {
-                match other {
-                    Packet::Value(v2) => self.cmp(&Packet::Packets(vec![Packet::Value(*v2)])),
-                    Packet::Packets(ps_right) => {
-                        for i in 0..ps_left.len() {
-                            if i >= ps_right.len() {
-                                return Ordering::Greater;
-                            }
-    
-                            let e = ps_left[i].cmp(&ps_right[i]);
-                            if e != Ordering::Equal {
-                                return e;
-                            }
-                        }
-                        if ps_left.len() == ps_right.len() {
-                            return Ordering::Equal;
-                        }
-                        return Ordering::Less;
+        match (self, other) {
+            (Packet::Value(v1), Packet::Value(v2)) => v1.cmp(v2),
+            (Packet::Value(v1), _) => Packet::Packets(vec![Packet::Value(*v1)]).cmp(other),
+            (_, Packet::Value(v2)) => self.cmp(&Packet::Packets(vec![Packet::Value(*v2)])),
+            (Packet::Packets(ps_left), Packet::Packets(ps_right)) => {
+                for i in 0..ps_left.len() {
+                    if i >= ps_right.len() {
+                        return Ordering::Greater;
+                    }
+
+                    let e = ps_left[i].cmp(&ps_right[i]);
+                    if e != Ordering::Equal {
+                        return e;
                     }
                 }
+                if ps_left.len() == ps_right.len() {
+                    return Ordering::Equal;
+                }
+                return Ordering::Less; 
             }
         }
     }
@@ -118,20 +110,17 @@ fn parse(input: &str) -> Vec<Packet> {
 }
 
 fn solve1(packets: &Vec<Packet>) -> String {
-    let mut correct_indices: Vec<usize> = Vec::new();
+    let mut sum: usize = 0;
+    packets
+        .windows(2)
+        .step_by(2)
+        .enumerate()
+        .for_each(|(i, pair)| 
+            if pair[0] < pair[1] { 
+                sum += i + 1;
+            }
+        );
 
-    let mut i: usize = 0;
-    while i < packets.len() {
-        let p1 = &packets[i];
-        i += 1;
-        let p2 = &packets[i];
-        if p1 < p2 {
-            correct_indices.push(i/2 + 1);
-        }
-        i += 1;
-    }
-
-    let sum: usize = correct_indices.iter().sum();
     sum.to_string()
 }
 
@@ -139,15 +128,17 @@ fn solve2(parsed_input: &Vec<Packet>) -> String {
     let mut packets: Vec<&Packet> = parsed_input.iter().map(|p| p).collect();
 
     let packet_2 = Packet::Packets(vec![Packet::Packets(vec![Packet::Value(2)])]);
-    packets.push(&packet_2);
     let packet_6 = Packet::Packets(vec![Packet::Packets(vec![Packet::Value(6)])]);
+    packets.push(&packet_2);
     packets.push(&packet_6);
 
     packets.sort();
-    let index_2 = packets.iter().enumerate().find(|&(_, &p)| p == &packet_2).unwrap().0 + 1;
-    let index_6 = packets.iter().enumerate().find(|&(_, &p)| p == &packet_6).unwrap().0 + 1;
+    let mut decoder_key = 1;
+    packets.iter().enumerate().for_each(|(i, &p)| {
+        if p == &packet_2 || p == &packet_6 { decoder_key *= i + 1 }
+    });
 
-    (index_2 * index_6).to_string()
+    decoder_key.to_string()
 }
 
 pub fn solve(input: &str) -> (String, String) {
