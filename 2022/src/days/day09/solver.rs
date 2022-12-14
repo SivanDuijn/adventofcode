@@ -1,6 +1,6 @@
 // https://adventofcode.com/2022/day/9
 
-use std::{ops::{Sub, AddAssign}, cmp::{max, min}, collections::HashSet};
+use std::{ops::{Sub, AddAssign}, collections::HashSet};
 
 fn parse(input: &str) -> Vec<(&str, i32)> {
     return input.split("\n")
@@ -22,8 +22,8 @@ impl Point {
 
     /// Clamps the values of x and y to -1 and 1
     pub fn clamp_to_one(&mut self) {
-        self.x = min(max(self.x, -1), 1);
-        self.y = min(max(self.y, -1), 1);
+        self.x = self.x.clamp(-1, 1);
+        self.y = self.y.clamp(-1, 1);
     }
 }
 
@@ -80,7 +80,6 @@ fn simulate_moves(motions: &Vec<(&str, i32)>, n_knots: usize) -> String {
                     }
                 }
             }
-            
             amount -= 1;
         }
 
