@@ -40,7 +40,6 @@ fn solve1(blocked_paths: &mut HashSet<i32>, lowest_rock: i32) -> String {
         counter += 1;
     }
 
-
     counter.to_string()
 }
 
@@ -85,8 +84,49 @@ fn may_the_sand_be_falling(blocked_paths: &HashSet<i32>, floor: i32) -> (i32, bo
 }
 
 pub fn solve(input: &str) -> (String, String) {
-    let (mut rocks, lowest_rock) = parse(input);
-    let mut rocks_clone: HashSet<i32> = HashSet::new();
-    rocks.iter().for_each(|v| { rocks_clone.insert(*v); });
-    return (solve1(&mut rocks, lowest_rock), solve2(&mut rocks_clone, lowest_rock));
+    let (rocks, lowest_rock) = parse(input);
+    let mut rocks_clone_s1: HashSet<i32> = HashSet::new();
+    let mut rocks_clone_s2: HashSet<i32> = HashSet::new();
+    rocks.iter().for_each(|v| { rocks_clone_s1.insert(*v); rocks_clone_s2.insert(*v); });
+
+    let solutions = (solve1(&mut rocks_clone_s1, lowest_rock), solve2(&mut rocks_clone_s2, lowest_rock));
+
+    draw_sand(&rocks, &rocks_clone_s1);
+    draw_sand(&rocks, &rocks_clone_s2);
+
+    return solutions;
+}
+
+fn draw_sand(rocks: &HashSet<i32>, blocked_paths: &HashSet<i32>) {
+    let mut out: String = String::new();
+
+    let mut min_x = i32::MAX;
+    let mut max_x = i32::MIN;
+    let mut max_y = i32::MIN;
+
+    
+    blocked_paths.iter().for_each(|&v| {
+        let x = v % 65536;
+        let y = v / 65536;
+        
+        if x > max_x { max_x = x; }
+        if x < min_x { min_x = x; }
+        if y > max_y { max_y = y; }
+    });
+    min_x = 327;
+    max_x = 673;
+    println!("{min_x} {max_x}");
+
+    for y in 0..(max_y+2) {
+        for x in (min_x-2)..(max_x+2) {
+            let v = (y<<16) + x;
+            if rocks.contains(&v) { out.push('#'); }
+            else if blocked_paths.contains(&v) { out.push('.'); }
+            else if v == 500 { out.push('+'); }
+            else { out.push(' '); }
+        }
+        out += "\n";
+    }
+
+    println!("{out}");
 }
